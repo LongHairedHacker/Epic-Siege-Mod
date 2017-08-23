@@ -16,10 +16,10 @@ public class SpiderHandler
 		{
 			return;
 		}
-		
+
 		if(event.getEntityLiving() instanceof EntityPlayer && event.getSource() != null)
 		{
-			if(event.getSource().getEntity() instanceof EntitySpider && event.getEntityLiving().getRNG().nextInt(100) < ESM_Settings.SpiderWebChance)
+			if(event.getSource().getImmediateSource() instanceof EntitySpider && event.getEntityLiving().getRNG().nextInt(100) < ESM_Settings.SpiderWebChance)
 			{
 				if(event.getEntityLiving().world.getBlockState(event.getEntityLiving().getPosition()).getMaterial().isReplaceable())
 				{
