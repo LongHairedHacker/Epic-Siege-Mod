@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE_NAME=`echo "EpicSiegeMod-CI_MOD_VERSION.jar"`
+FILE_NAME=`echo "EpicSiegeMod-12.0..jar"`
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
 CHANGE_LOG=`git log $DRONE_BRANCH -1 --pretty=format:"%B"`
 
@@ -17,14 +17,14 @@ echo "Parent file ID: $FID"
 
 JSON=`printf '{"changelog": "%s", "parentFileID": %s, "releaseType": "beta"}' "$CHANGE_LOG" "$FID"`
 
-FILE_NAME=`echo "EpicSiegeMod-deobf-CI_MOD_VERSION.jar"`
+FILE_NAME=`echo "EpicSiegeMod-deobf-12.0..jar"`
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
 
 echo "Uploading $FILE_NAME to Curse Forge..."
 echo
 RESPONSE=`curl -H "X-Api-Token: $CURSE_API_KEY" -X POST  -F metadata="$JSON"  -F file="@$FILE_LOCATION" https://minecraft.curseforge.com/api/projects/229449/upload-file`
 
-FILE_NAME=`echo "EpicSiegeMod-CI_MOD_VERSION-sources.jar"`
+FILE_NAME=`echo "EpicSiegeMod-12.0.-sources.jar"`
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
 
 echo "Uploading $FILE_NAME to Curse Forge..."

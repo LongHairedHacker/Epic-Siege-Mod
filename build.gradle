@@ -7,13 +7,13 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "CI_MOD_VERSION"
+version = "12.0.42"
 group= "funwayguy.epicsiegemod"
 archivesBaseName = "EpicSiegeMod"
 
@@ -21,8 +21,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.11.2-13.20.0.2206"
-    mappings = "snapshot_20161220"
+    version = "1.12.1-14.22.0.2460"
+    mappings = "snapshot_20170822"
 }
 
 dependencies {
@@ -32,12 +32,12 @@ processResources
 {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
-    
+
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-    
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
@@ -54,7 +54,7 @@ task apiJar(type: Jar) {
         }
         appendix = 'api'
 }
- 
+
 artifacts {
         archives deobfJar
         archives apiJar

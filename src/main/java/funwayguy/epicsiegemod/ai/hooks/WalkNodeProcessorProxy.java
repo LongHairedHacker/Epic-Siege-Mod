@@ -33,7 +33,7 @@ import funwayguy.epicsiegemod.core.ESM;
 public class WalkNodeProcessorProxy extends WalkNodeProcessor
 {
     private float avoidsWater;
-    
+
 	@Override
     public void initProcessor(IBlockAccess sourceIn, EntityLiving mob)
     {
@@ -52,7 +52,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
         this.entity.setPathPriority(PathNodeType.WATER, this.avoidsWater);
         super.postProcess();
     }
-	
+
 	@Override
     public PathPoint getStart()
     {
@@ -118,25 +118,25 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
     {
         return this.openPoint(MathHelper.floor(x - (double)(this.entity.width / 2.0F)), MathHelper.floor(y), MathHelper.floor(z - (double)(this.entity.width / 2.0F)));
     }
-	
+
 	@Override
     public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance)
     {
         int i = 0;
         int j = 0;
-        PathNodeType pathnodetype = this.getPathNodeType(this.entity, currentPoint.xCoord, currentPoint.yCoord + 1, currentPoint.zCoord);
+        PathNodeType pathnodetype = this.getPathNodeType(this.entity, currentPoint.x, currentPoint.y + 1, currentPoint.z);
 
         if (this.entity.getPathPriority(pathnodetype) >= 0.0F)
         {
             j = MathHelper.floor(Math.max(1.0F, this.entity.stepHeight));
         }
 
-        BlockPos blockpos = (new BlockPos(currentPoint.xCoord, currentPoint.yCoord, currentPoint.zCoord)).down();
-        double d0 = (double)currentPoint.yCoord - (1.0D - this.blockaccess.getBlockState(blockpos).getBoundingBox(this.blockaccess, blockpos).maxY);
-        PathPoint pathpoint = this.getSafePoint(currentPoint.xCoord, currentPoint.yCoord, currentPoint.zCoord + 1, j, d0, EnumFacing.SOUTH);
-        PathPoint pathpoint1 = this.getSafePoint(currentPoint.xCoord - 1, currentPoint.yCoord, currentPoint.zCoord, j, d0, EnumFacing.WEST);
-        PathPoint pathpoint2 = this.getSafePoint(currentPoint.xCoord + 1, currentPoint.yCoord, currentPoint.zCoord, j, d0, EnumFacing.EAST);
-        PathPoint pathpoint3 = this.getSafePoint(currentPoint.xCoord, currentPoint.yCoord, currentPoint.zCoord - 1, j, d0, EnumFacing.NORTH);
+        BlockPos blockpos = (new BlockPos(currentPoint.x, currentPoint.y, currentPoint.z)).down();
+        double d0 = (double)currentPoint.y - (1.0D - this.blockaccess.getBlockState(blockpos).getBoundingBox(this.blockaccess, blockpos).maxY);
+        PathPoint pathpoint = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
+        PathPoint pathpoint1 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z, j, d0, EnumFacing.WEST);
+        PathPoint pathpoint2 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z, j, d0, EnumFacing.EAST);
+        PathPoint pathpoint3 = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
 
         if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance)
         {
@@ -165,7 +165,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
 
         if (flag && flag3)
         {
-            PathPoint pathpoint4 = this.getSafePoint(currentPoint.xCoord - 1, currentPoint.yCoord, currentPoint.zCoord - 1, j, d0, EnumFacing.NORTH);
+            PathPoint pathpoint4 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
 
             if (pathpoint4 != null && !pathpoint4.visited && pathpoint4.distanceTo(targetPoint) < maxDistance)
             {
@@ -175,7 +175,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
 
         if (flag && flag2)
         {
-            PathPoint pathpoint5 = this.getSafePoint(currentPoint.xCoord + 1, currentPoint.yCoord, currentPoint.zCoord - 1, j, d0, EnumFacing.NORTH);
+            PathPoint pathpoint5 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
 
             if (pathpoint5 != null && !pathpoint5.visited && pathpoint5.distanceTo(targetPoint) < maxDistance)
             {
@@ -185,7 +185,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
 
         if (flag1 && flag3)
         {
-            PathPoint pathpoint6 = this.getSafePoint(currentPoint.xCoord - 1, currentPoint.yCoord, currentPoint.zCoord + 1, j, d0, EnumFacing.SOUTH);
+            PathPoint pathpoint6 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
 
             if (pathpoint6 != null && !pathpoint6.visited && pathpoint6.distanceTo(targetPoint) < maxDistance)
             {
@@ -195,7 +195,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
 
         if (flag1 && flag2)
         {
-            PathPoint pathpoint7 = this.getSafePoint(currentPoint.xCoord + 1, currentPoint.yCoord, currentPoint.zCoord + 1, j, d0, EnumFacing.SOUTH);
+            PathPoint pathpoint7 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
 
             if (pathpoint7 != null && !pathpoint7.visited && pathpoint7.distanceTo(targetPoint) < maxDistance)
             {
@@ -218,12 +218,12 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
         IBlockState blockstate = this.blockaccess.getBlockState(blockpos);
         IBlockState blockstate1 = this.blockaccess.getBlockState(blockpos1);
         double d0 = (double)y - (1.0D - blockstate1.getBoundingBox(this.blockaccess, blockpos1).maxY);
-        
+
         if(entity != null)
         {
         	AxisAlignedBB bBounds = blockstate1.getCollisionBoundingBox(entity.world, blockpos);
 	        AxisAlignedBB bBounds1 = blockstate1.getCollisionBoundingBox(entity.world, blockpos1);
-	        
+
 	        if(bBounds1 == null || (bBounds1.maxX - bBounds1.minX) < 0.5F || (bBounds1.maxZ - bBounds1.minZ) < 0.5F)
 	        {
 	        	if(bBounds == null || (bBounds.maxX - bBounds1.minX) < 0.5F || (bBounds.maxZ - bBounds.minZ) < 0.5F)
@@ -241,7 +241,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
         else
         {
             PathNodeType pathnodetype = this.getPathNodeType(this.entity, x, y, z);
-            
+
             if(pathnodetype == PathNodeType.BLOCKED && CanFit(entity, blockstate, blockpos))
             {
             	// We can fit, keep going
@@ -255,7 +255,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
             	try
             	{
             		Vec3d vec = (Vec3d)m_getFlow.invoke(blockstate.getBlock(), blockaccess, blockpos, blockstate);
-            		if(vec.xCoord != 0D || vec.yCoord != 0D || vec.zCoord != 0D)
+            		if(vec.x != 0D || vec.y != 0D || vec.z != 0D)
             		{
                     	// Flowing liquids are bad
                     	pathnodetype = PathNodeType.BLOCKED;
@@ -265,7 +265,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
             		ESM.logger.log(Level.ERROR, "Unable to pull liquid flow direction");
             	}
             }
-            
+
             float f = this.entity.getPathPriority(pathnodetype);
             double d1 = (double)this.entity.width / 2.0D;
 
@@ -356,7 +356,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
             }
         }
     }
-    
+
     public static boolean CanFit(Entity entity, IBlockState state, BlockPos pos)
     {
     	if(state == null || (entity != null && state.getBoundingBox(entity.world, pos) == null))
@@ -366,29 +366,29 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
     	{
     		return false;
     	}
-    	
+
     	AxisAlignedBB eBounds = entity.getEntityBoundingBox();
     	AxisAlignedBB bBounds = state.getBoundingBox(entity.world, pos);
-    	
+
     	double BW = Math.max(bBounds.maxX - bBounds.minX, bBounds.maxZ - bBounds.minZ);
     	double BH = bBounds.maxY - bBounds.minY;
-    	
+
     	double EW = Math.max(eBounds.maxX - eBounds.minX, eBounds.maxZ - eBounds.minZ);
     	double EH = eBounds.maxY - eBounds.minY;
-    	
+
     	if(BW <= 0 || BH <= 0)
     	{
     		return true;
     	}
-    	
+
     	if(BW > 0 && EW >= 1)
     	{
     		return false;
     	}
-    	
+
     	return BW + (EW%1F) <= 1D || BH <= 0.5F || BH + (EH%1F) <= 1F;
     }
-    
+
     @Override
     public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn)
     {
@@ -473,7 +473,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
     {
         return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanBreakDoors(), this.getCanEnterDoors());
     }
-    
+
     @Override
     public PathNodeType getPathNodeType(IBlockAccess accessIn, int x, int y, int z)
     {
@@ -533,9 +533,9 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
         Material material = iblockstate.getMaterial();
         return material == Material.AIR ? PathNodeType.OPEN : (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY ? (block == Blocks.FIRE ? PathNodeType.DAMAGE_FIRE : (block == Blocks.CACTUS ? PathNodeType.DAMAGE_CACTUS : (block instanceof BlockDoor && material == Material.WOOD && !((Boolean)iblockstate.getValue(BlockDoor.OPEN)).booleanValue() ? PathNodeType.DOOR_WOOD_CLOSED : (block instanceof BlockDoor && material == Material.IRON && !((Boolean)iblockstate.getValue(BlockDoor.OPEN)).booleanValue() ? PathNodeType.DOOR_IRON_CLOSED : (block instanceof BlockDoor && ((Boolean)iblockstate.getValue(BlockDoor.OPEN)).booleanValue() ? PathNodeType.DOOR_OPEN : (block instanceof BlockRailBase ? PathNodeType.RAIL : (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || ((Boolean)iblockstate.getValue(BlockFenceGate.OPEN)).booleanValue()) ? (material == Material.WATER ? PathNodeType.WATER : (material == Material.LAVA ? PathNodeType.LAVA : (block.isPassable(p_189553_1_, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED))) : PathNodeType.FENCE))))))) : PathNodeType.TRAPDOOR);
     }
-    
+
     private static Method m_getFlow;
-    
+
     static
     {
     	try

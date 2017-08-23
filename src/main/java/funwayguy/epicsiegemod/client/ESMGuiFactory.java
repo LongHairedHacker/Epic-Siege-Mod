@@ -24,11 +24,5 @@ public class ESMGuiFactory implements IModGuiFactory
 	{
 		return null;
 	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
-	{
-		return null;
-	}
+
 }

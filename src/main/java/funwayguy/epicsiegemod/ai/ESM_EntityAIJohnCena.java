@@ -16,7 +16,7 @@ public class ESM_EntityAIJohnCena extends EntityAIBase
     CreeperHooks creeperHooks;
     boolean detLocked = false;
     int blastSize = -1;
-    
+
     public ESM_EntityAIJohnCena(EntityCreeper creeper)
     {
         this.creeper = creeper;
@@ -26,26 +26,21 @@ public class ESM_EntityAIJohnCena extends EntityAIBase
         	this.setMutexBits(1);
         }
     }
-    
+
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
     public boolean shouldExecute()
     {
         EntityLivingBase target = this.creeper.getAttackTarget();
-        
+
         if(blastSize < 0)
         {
         	blastSize = creeperHooks.getExplosionSize(); // Powered state is ignored for now
         }
         return this.creeper.getCreeperState() > 0 || canBreachEntity(target) || (target != null && this.creeper.getDistanceSqToEntity(target) < blastSize * blastSize);
     }
-    
-    @Override
-    public boolean continueExecuting()
-    {
-    	return true;
-    }
+
     
     public boolean canBreachEntity(EntityLivingBase target)
     {
@@ -53,10 +48,10 @@ public class ESM_EntityAIJohnCena extends EntityAIBase
         {
         	return true;
         }
-    	
+
     	return false;
     }
-    
+
     /**
      * Execute a one shot task or start executing a continuous task
      */
