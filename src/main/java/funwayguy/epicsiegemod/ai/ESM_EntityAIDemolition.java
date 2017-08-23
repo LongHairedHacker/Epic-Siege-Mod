@@ -13,35 +13,35 @@ public class ESM_EntityAIDemolition extends EntityAIBase
 {
 	public EntityLiving host;
 	private int delay = 0;
-	
+
 	public ESM_EntityAIDemolition(EntityLiving host)
 	{
 		this.host = host;
 	}
-	
+
 	@Override
 	public boolean shouldExecute()
 	{
 		delay -= 1;
-		
+
 		if(delay > 0)
 		{
 			return false;
 		}
-		
+
 		delay = 0;
-		
+
 		boolean flag = (host.getHeldItemMainhand() != null && host.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.TNT)) || (host.getHeldItemOffhand() != null && host.getHeldItemOffhand().getItem() == Item.getItemFromBlock(Blocks.TNT));
-		
+
 		return flag && host.getAttackTarget() != null && host.getAttackTarget().getDistanceToEntity(host) < 4F;
 	}
-	
+
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public void startExecuting()
 	{

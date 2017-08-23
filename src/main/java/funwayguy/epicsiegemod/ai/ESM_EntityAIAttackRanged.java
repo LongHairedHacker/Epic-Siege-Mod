@@ -76,7 +76,7 @@ public class ESM_EntityAIAttackRanged extends EntityAIBase
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean continueExecuting()
+    public boolean shouldContinueExecuting()
     {
         return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
     }

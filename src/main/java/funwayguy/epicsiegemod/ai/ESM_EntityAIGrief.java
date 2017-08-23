@@ -18,13 +18,13 @@ public class ESM_EntityAIGrief extends EntityAIBase
 	EntityLiving entityLiving;
 	BlockPos markedLoc;
 	int digTick = 0;
-	
+
 	public ESM_EntityAIGrief(EntityLiving entity)
 	{
 		this.entityLiving = entity;
 		this.setMutexBits(5);
 	}
-	
+
 	@Override
 	public boolean shouldExecute()
 	{
@@ -32,17 +32,17 @@ public class ESM_EntityAIGrief extends EntityAIBase
 		{
 			return false;
 		}
-		
+
 		BlockPos curPos = entityLiving.getPosition();
-		
+
 		BlockPos candidate = null;
 		ItemStack item = entityLiving.getHeldItemMainhand();
-		
+
 		BlockPos tarPos = curPos.add(entityLiving.getRNG().nextInt(32) - 16, entityLiving.getRNG().nextInt(16) - 8, entityLiving.getRNG().nextInt(32) - 16);
-		
+
 		IBlockState state = entityLiving.world.getBlockState(tarPos);
 		ResourceLocation regName = Block.REGISTRY.getNameForObject(state.getBlock());
-		
+
 		if((ESM_Settings.ZombieGriefBlocks.contains(regName.toString()) || state.getLightValue(entityLiving.world, tarPos) > 0) && state.getBlockHardness(entityLiving.world, tarPos) >= 0 && !state.getMaterial().isLiquid())
 		{
 			if(!ESM_Settings.ZombieDiggerTools || (item != null && item.getItem().canHarvestBlock(state, item)) || state.getMaterial().isToolNotRequired())
@@ -50,7 +50,7 @@ public class ESM_EntityAIGrief extends EntityAIBase
 				candidate = tarPos;
 			}
 		}
-		
+
 		if(candidate == null)
 		{
 			return false;
@@ -62,38 +62,38 @@ public class ESM_EntityAIGrief extends EntityAIBase
 			return true;
 		}
 	}
-	
+
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		if(markedLoc == null || !entityLiving.isEntityAlive())
 		{
 			markedLoc = null;
 			return false;
 		}
-		
+
 		IBlockState state = entityLiving.world.getBlockState(markedLoc);
 		ResourceLocation regName = Block.REGISTRY.getNameForObject(state.getBlock());
-		
+
 		if(state.getBlock() == Blocks.AIR || (!ESM_Settings.ZombieGriefBlocks.contains(regName) && !ESM_Settings.ZombieGriefBlocks.contains(regName.toString()) && state.getLightValue(entityLiving.world, markedLoc) <= 0))
 		{
 			markedLoc = null;
 			return false;
 		}
-		
+
 		ItemStack item = entityLiving.getHeldItemMainhand();
 		return !ESM_Settings.ZombieDiggerTools || (item != null && item.getItem().canHarvestBlock(state, item)) || state.getMaterial().isToolNotRequired();
 	}
-	
+
 	@Override
 	public void updateTask()
 	{
-		if(!continueExecuting())
+		if(!shouldContinueExecuting())
 		{
 			digTick = 0;
 			return;
 		}
-		
+
 		if(entityLiving.getDistance(markedLoc.getX(), markedLoc.getY(), markedLoc.getZ()) >= 3)
 		{
 			if(entityLiving.getNavigator().noPath())
@@ -103,16 +103,16 @@ public class ESM_EntityAIGrief extends EntityAIBase
 			digTick = 0;
 			return;
 		}
-		
+
 		IBlockState state = entityLiving.world.getBlockState(markedLoc);
 		digTick++;
-		
+
 		float str = AiUtils.getBlockStrength(entityLiving, entityLiving.world, markedLoc) * (digTick + 1);
-		
+
 		if(str >= 1F)
 		{
 			digTick = 0;
-			
+
 			if(markedLoc != null)
 			{
 				ItemStack item = entityLiving.getHeldItemMainhand();
@@ -133,11 +133,11 @@ public class ESM_EntityAIGrief extends EntityAIBase
 			}
 		}
 	}
-	
+
 	public boolean canHarvest(EntityLiving entity, BlockPos pos)
 	{
 		IBlockState state = entity.world.getBlockState(pos);
-		
+
 		if(!state.getMaterial().isSolid() || state.getBlockHardness(entity.world, pos) < 0F)
 		{
 			return false;
@@ -145,7 +145,7 @@ public class ESM_EntityAIGrief extends EntityAIBase
 		{
 			return true;
 		}
-		
+
 		ItemStack held = entity.getHeldItem(EnumHand.MAIN_HAND);
 		return held != null && held.getItem().canHarvestBlock(state, held);
 	}

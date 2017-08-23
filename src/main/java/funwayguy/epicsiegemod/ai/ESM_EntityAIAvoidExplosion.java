@@ -71,7 +71,7 @@ public class ESM_EntityAIAvoidExplosion extends EntityAIBase
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     @Override
-    public boolean continueExecuting()
+    public boolean shouldContinueExecuting()
     {
         return !this.entityPathNavigate.noPath();
     }

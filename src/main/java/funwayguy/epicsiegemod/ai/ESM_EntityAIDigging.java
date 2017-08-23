@@ -21,36 +21,36 @@ public class ESM_EntityAIDigging extends EntityAIBase
 	BlockPos curBlock;
 	int scanTick = 0;
 	int digTick = 0;
-	
+
 	public ESM_EntityAIDigging(EntityLiving digger)
 	{
 		this.digger = digger;
 		this.setMutexBits(1);
 	}
-	
+
 	@Override
 	public boolean shouldExecute()
 	{
 		target = digger.getAttackTarget();
-		
+
 		if(target == null || !target.isEntityAlive() || !digger.getNavigator().noPath() || digger.getDistanceToEntity(target) < 1D)
 		{
 			return false;
 		}
-		
+
         //digger.getLookHelper().setLookPosition(target.posX, target.posY + (double)target.getEyeHeight(), target.posZ, (float)digger.getHorizontalFaceSpeed(), (float)digger.getVerticalFaceSpeed());
 		curBlock = (curBlock != null && digger.getDistanceSq(curBlock) <= (4D * 4D) && canHarvest(digger, curBlock))? curBlock : getNextBlock(digger, target, 2D);
-		
+
 		return curBlock != null;
 	}
-	
+
 	@Override
 	public void startExecuting()
 	{
 		super.startExecuting();
 		digger.getNavigator().clearPathEntity();
 	}
-	
+
 	@Override
 	public void resetTask()
 	{
@@ -59,27 +59,27 @@ public class ESM_EntityAIDigging extends EntityAIBase
 	}
 	
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		return curBlock != null && digger.getDistanceSq(curBlock) <= (4D * 4D) && canHarvest(digger, curBlock);
 	}
-	
+
 	@Override
 	public void updateTask()
 	{
-		if(!this.continueExecuting())
+		if(!this.shouldContinueExecuting())
 		{
 			return;
 		}
-		
+
 		digger.getLookHelper().setLookPosition(target.posX, target.posY + (double)target.getEyeHeight(), target.posZ, (float)digger.getHorizontalFaceSpeed(), (float)digger.getVerticalFaceSpeed());
 		digger.getNavigator().clearPathEntity();
-		
+
 		digTick++;
 		float str = AiUtils.getBlockStrength(digger, digger.world, curBlock) * (digTick + 1F);
 		ItemStack heldItem = digger.getHeldItem(EnumHand.MAIN_HAND);
 		IBlockState state = digger.world.getBlockState(curBlock);
-		
+
 		if(digger.world.isAirBlock(curBlock))
 		{
 			this.resetTask();
@@ -96,28 +96,28 @@ public class ESM_EntityAIDigging extends EntityAIBase
 			digger.world.sendBlockBreakProgress(digger.getEntityId(), curBlock, (int)(str * 10F));
 		}
 	}
-	
+
 	public BlockPos getNextBlock(EntityLiving entityLiving, EntityLivingBase target, double dist)
 	{
         int digWidth = MathHelper.ceil(entityLiving.width);
         int digHeight = MathHelper.ceil(entityLiving.height);
-        
+
         int passMax = digWidth * digWidth * digHeight;
 
         int y = scanTick%digHeight;
         int x = (scanTick%(digWidth * digHeight))/digHeight;
         int z = scanTick/(digWidth * digHeight);
-        
+
 		double rayX = x + entityLiving.posX - (digWidth/2);
 		double rayY = y + entityLiving.posY + 0.5D;
 		double rayZ = z + entityLiving.posZ - (digWidth/2);
 		Vec3d rayOrigin = new Vec3d(rayX, rayY, rayZ);
 		Vec3d rayOffset = target.getPositionVector();
 		rayOffset = rayOrigin.add(rayOffset.subtract(rayOrigin).normalize().scale(dist));
-		
+
 		BlockPos p1 = entityLiving.getPosition();
 		BlockPos p2 = target.getPosition();
-		
+
 		if(p1.getDistance(p2.getX(), p1.getY(), p2.getZ()) < 4)
 		{
 			if(p2.getY() - p1.getY() > 2D)
@@ -134,28 +134,28 @@ public class ESM_EntityAIDigging extends EntityAIBase
 		{
 			//rayOffset = rayOrigin.add(digger.getLook(1F).scale(dist));
 		}
-		
+
 		RayTraceResult ray = entityLiving.world.rayTraceBlocks(rayOrigin, rayOffset, false, true, false);
 		scanTick = (scanTick + 1)%passMax;
-		
+
 		if(ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK)
 		{
 			BlockPos pos = ray.getBlockPos();
 			IBlockState state = entityLiving.world.getBlockState(pos);
-			
+
 			if(canHarvest(entityLiving, pos) && ESM_Settings.ZombieDigBlacklist.contains(state.getBlock().getRegistryName().toString()) == ESM_Settings.ZombieSwapList)
 			{
 				return pos;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public boolean canHarvest(EntityLiving entity, BlockPos pos)
 	{
 		IBlockState state = entity.world.getBlockState(pos);
-		
+
 		if(!state.getMaterial().isSolid() || state.getBlockHardness(entity.world, pos) < 0F)
 		{
 			return false;
@@ -163,7 +163,7 @@ public class ESM_EntityAIDigging extends EntityAIBase
 		{
 			return true;
 		}
-		
+
 		ItemStack held = entity.getHeldItem(EnumHand.MAIN_HAND);
 		return held != null && held.getItem().canHarvestBlock(state, held);
 	}

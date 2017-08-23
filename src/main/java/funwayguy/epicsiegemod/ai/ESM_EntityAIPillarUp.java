@@ -17,9 +17,9 @@ public class ESM_EntityAIPillarUp extends EntityAIBase
 	public int placeDelay = 15;
 	public EntityLiving builder;
 	public EntityLivingBase target;
-	
+
 	BlockPos blockPos;
-	
+
 	public ESM_EntityAIPillarUp(EntityLiving entity)
 	{
 		this.builder = entity;
@@ -29,22 +29,22 @@ public class ESM_EntityAIPillarUp extends EntityAIBase
 	public boolean shouldExecute()
 	{
 		target = builder.getAttackTarget();
-		
+
 		if(target == null || !target.isEntityAlive())
 		{
 			return false;
 		}
-		
+
 		if(builder.getNavigator().noPath() && ((builder.getDistance(target.posX, builder.posY, target.posZ) < 4D && builder.onGround) || builder.isInLava() || builder.isInWater()))
 		{
 			BlockPos tmpPos = builder.getPosition();
 			BlockPos orgPos = tmpPos;
-			
+
 			int xOff = (int)Math.signum(MathHelper.floor(target.posX) - orgPos.getX());
 			int zOff = (int)Math.signum(MathHelper.floor(target.posZ) - orgPos.getZ());
-			
+
 			boolean canPlace = false;
-			
+
 			for(EnumFacing dir : placeSurface)
 			{
 				if(builder.world.getBlockState(tmpPos.offset(dir)).isNormalCube())
@@ -53,7 +53,7 @@ public class ESM_EntityAIPillarUp extends EntityAIBase
 					break;
 				}
 			}
-			
+
 			if(target.posY - builder.posY < 16 && builder.world.getBlockState(tmpPos.add(0, -2, 0)).isNormalCube() && builder.world.getBlockState(tmpPos.add(0, -1, 0)).isNormalCube()) // Sideways pillaring
 			{
 				if(builder.world.getBlockState(tmpPos.add(xOff, -1, 0)).getMaterial().isReplaceable())
@@ -70,32 +70,32 @@ public class ESM_EntityAIPillarUp extends EntityAIBase
 			{
 				return false;
 			}
-			
+
 			if(!canPlace || builder.world.getBlockState(orgPos.add(0, 2, 0)).getMaterial().blocksMovement() || builder.world.getBlockState(tmpPos.add(0, 2, 0)).getMaterial().blocksMovement())
 			{
 				return false;
 			}
-			
+
 			blockPos = tmpPos;
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public void startExecuting()
 	{
 		placeDelay = 15;
 	}
-	
+
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		return shouldExecute();
 	}
-	
+
 	@Override
 	public void updateTask()
 	{
@@ -108,12 +108,12 @@ public class ESM_EntityAIPillarUp extends EntityAIBase
 			placeDelay = 15;
 
 			builder.setPositionAndUpdate(blockPos.getX() + 0.5D, blockPos.getY() + 1D, blockPos.getZ() + 0.5D);
-			
+
 			if(builder.world.getBlockState(blockPos).getMaterial().isReplaceable())
 			{
 				builder.world.setBlockState(blockPos, Blocks.COBBLESTONE.getDefaultState());
 			}
-			
+
 			builder.getNavigator().setPath(builder.getNavigator().getPathToEntityLiving(target), builder.getMoveHelper().getSpeed());
 		}
 	}
