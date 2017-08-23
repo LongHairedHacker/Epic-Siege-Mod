@@ -13,12 +13,12 @@ import funwayguy.epicsiegemod.core.ESM_Settings;
 public class ConfigHandler
 {
 	public static Configuration config;
-	
+
 	private static final String CAT_MAIN = "General";
 	private static final String CAT_CREEPER = "Creepers";
 	private static final String CAT_SKELETON = "Skeletons";
 	private static final String CAT_ADVANCED = "Other";
-	
+
 	public static void initConfigs()
 	{
 		if(config == null)
@@ -26,9 +26,9 @@ public class ConfigHandler
 			ESM.logger.log(Level.ERROR, "Config attempted to be loaded before it was initialised!");
 			return;
 		}
-		
+
 		config.load();
-		
+
 		// === MAIN ===
 		ESM_Settings.hideUpdates =			config.getBoolean("Hide Updates", CAT_MAIN, false, "Hides update notifications");
 		ESM_Settings.hardDay =				config.getInt("Hardcore Day Cycle", CAT_MAIN, 8, 0, Integer.MAX_VALUE, "The interval in which 'hard' days will occur where mob spawning is increased and lighting is ignored (0 = off, default = 8/full moon)");
@@ -40,13 +40,13 @@ public class ConfigHandler
 		ESM_Settings.AllowSleep =			config.getBoolean("Allow Sleep", CAT_MAIN, false, "Prevents players skipping the night through sleep");
 		ESM_Settings.ResistanceCoolDown =	config.getInt("Resistance Cooldown", CAT_MAIN, 200, 0, Integer.MAX_VALUE, "Temporary invulnerability in ticks when respawning and teleporting");
 		ESM_Settings.attackPets =			config.getBoolean("Attack Pets", CAT_MAIN, true, "Mobs will attack any player owned pets they find");
-		
+
 		ESM_Settings.AIExempt.clear();
 		for(String s : config.getStringList("AI Blacklist", CAT_MAIN, new String[]{"minecraft:villager_golem"}, "Mobs that are exempt from AI modifications"))
 		{
 			ESM_Settings.AIExempt.add(new ResourceLocation(s));
 		}
-		
+
 		// === CREEPER ===
 		ESM_Settings.CreeperBreaching =		config.getBoolean("Breaching", CAT_CREEPER, true, "Creepers will attempt to blast through walls");
 		ESM_Settings.CreeperNapalm =		config.getBoolean("Napalm", CAT_CREEPER, true, "Creeper detonations leave behind flaming craters");
@@ -57,25 +57,25 @@ public class ConfigHandler
 		ESM_Settings.MobBombs.addAll(Arrays.asList(config.getStringList("Creeper Jockey Mobs", CAT_CREEPER, new String[]{}, "Sets which mobs can spawn with Creepers riding them")));
 		ESM_Settings.MobBombRarity =		config.getInt("Creeper Jockey Chance", CAT_CREEPER, 10, 0, 100, "The chance a Creeper will spawn riding another mob");
 		ESM_Settings.MobBombAll =			config.getBoolean("All Creeper Jockeys", CAT_CREEPER, true, "Ignores the listing and allows any mob to have a Creeper rider");
-		
+
 		// === SKELETON ===
 		ESM_Settings.SkeletonAccuracy =		config.getInt("Arrow Error", CAT_SKELETON, 0, 0, Integer.MAX_VALUE, "How likely Skeletons are to miss their target");
 		ESM_Settings.SkeletonDistance =		config.getInt("Fire Distance", CAT_SKELETON, 64, 1, Integer.MAX_VALUE, "How far away can Skeletons shoot from");
 		ESM_Settings.WitherSkeletonRarity = config.getInt("Wither Skeleton Chance", CAT_SKELETON, 10, 0, 100, "The chance a skeleton will spawn as Wither in other dimensions");
-		
+
 		// === OTHER ===
 		ESM_Settings.attackEvasion =		config.getBoolean("Evasive AI", CAT_ADVANCED, true, "Mobs will strafe more than normal and avoid imminent explosions");
 		ESM_Settings.bossModifier =			config.getFloat("Boss Kill Modifier", CAT_ADVANCED, 0.1F, 0F, Float.MAX_VALUE, "The factor by which mob health and damage multipliers will be increased when bosses are killed");
 		ESM_Settings.animalsAttack =		config.getBoolean("Animals Retaliate", CAT_ADVANCED, true, "Animals will fight back if provoked");
 		ESM_Settings.neutralMobs =			config.getBoolean("Neutral Mobs", CAT_ADVANCED, false, "Mobs are passive until provoked");
 		//ESM_Settings.mobBoating  =		config.getBoolean("Mob Boating", CAT_ADVANCED, true, "Zombies and Skeletons will use boats in water to catch up to you!");
-		
+
 		ESM_Settings.diggerList.clear();
 		for(String s : config.getStringList("Digging Mobs", CAT_ADVANCED, new String[]{"minecraft:zombie"}, "List of mobs that can dig through blocks"))
 		{
 			ESM_Settings.diggerList.add(new ResourceLocation(s));
 		}
-		
+
 		ESM_Settings.ZombieDiggerTools =	config.getBoolean("Digging Tools Only", CAT_ADVANCED, true, "Digging mobs require the proper tools to dig");
 		ESM_Settings.ZombieSwapList =		config.getBoolean("Invert Digging Blacklist", CAT_ADVANCED, false, "Use the digging blacklist as a whitelist instead");
 		ESM_Settings.ZombieDigBlacklist.clear();
@@ -108,35 +108,35 @@ public class ConfigHandler
 				"minecraft:planks"
 		};
 		ESM_Settings.ZombieGriefBlocks = new ArrayList<String>(Arrays.asList(config.getStringList("General Griefable Blocks", CAT_ADVANCED, defGrief, "What blocks will be targeted for destruction when idle (Light sources included by default. Format: 'minecraft:wool:1')")));
-		
+
 		ESM_Settings.demolitionList.clear();
 		for(String s : config.getStringList("Demolition Mobs", CAT_ADVANCED, new String[]{"minecraft:zombie"}, "List of mobs that can drop live TNT"))
 		{
 			ESM_Settings.demolitionList.add(new ResourceLocation(s));
 		}
-		
+
 		ESM_Settings.demolitionChance =		config.getInt("Demolition Chance", CAT_ADVANCED, 10, 0, 100, "How common demolition variants are");
-		
+
 		ESM_Settings.pillarList.clear();
 		for(String s : config.getStringList("Building Mobs", CAT_ADVANCED, new String[]{"minecraft:zombie"}, "List of mobs that can pillar up and build stairs"))
 		{
 			ESM_Settings.pillarList.add(new ResourceLocation(s));
 		}
-		
+
 		ESM_Settings.EndermanPlayerTele =	config.getBoolean("Player Teleport", CAT_ADVANCED, true, "Allows Enderman to teleport the player instead of themelves");
 		ESM_Settings.SpiderWebChance =		config.getInt("Webbing Chance", CAT_ADVANCED, 25, 0, 100, "The chance a Spider will web its target to the ground");
 		ESM_Settings.ZombieInfectious =		config.getBoolean("Infectious Zombies", CAT_ADVANCED, true, "Dying to zombies will turn your corpse into one of them");
 		String[] defPot = new String[]
 		{
-			PotionTypes.HARMING.getRegistryName() + ":1:0",
-			PotionTypes.SLOWNESS.getRegistryName() + ":300:0",
-			MobEffects.BLINDNESS.getRegistryName() + ":300:0",
+			"minecraft:harming:1:0",
+			"minecraft:blindness:300:0",
+			"minecraft:slowness:300:0",
 			"minecraft:poison:300:0",
 			"minecraft:weakness:300:1",
 			"minecraft:mining_fatigue:300:2"
 		};
 		ESM_Settings.customPotions =		config.getStringList("Witch Potions", CAT_ADVANCED, defPot, "List of custom potion types witches can throw (\"id:duration:lvl\")");
-		
+
 		config.save();
 	}
 }
