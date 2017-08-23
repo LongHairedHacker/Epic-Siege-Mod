@@ -471,7 +471,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
 
     private PathNodeType getPathNodeType(EntityLiving entitylivingIn, int x, int y, int z)
     {
-        return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanBreakDoors(), this.getCanEnterDoors());
+        return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanOpenDoors(), this.getCanEnterDoors());
     }
 
     @Override
