@@ -525,7 +525,7 @@ public class WalkNodeProcessorProxy extends WalkNodeProcessor
         return pathnodetype;
     }
 
-    private PathNodeType getPathNodeTypeRaw(IBlockAccess p_189553_1_, int p_189553_2_, int p_189553_3_, int p_189553_4_)
+    protected PathNodeType getPathNodeTypeRaw(IBlockAccess p_189553_1_, int p_189553_2_, int p_189553_3_, int p_189553_4_)
     {
         BlockPos blockpos = new BlockPos(p_189553_2_, p_189553_3_, p_189553_4_);
         IBlockState iblockstate = p_189553_1_.getBlockState(blockpos);
