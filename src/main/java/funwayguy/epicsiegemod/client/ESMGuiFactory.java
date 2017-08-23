@@ -13,11 +13,7 @@ public class ESMGuiFactory implements IModGuiFactory
 	{
 	}
 
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass()
-	{
-		return ESMGuiConfig.class;
-	}
+
 
 	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
