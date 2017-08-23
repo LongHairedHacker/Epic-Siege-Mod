@@ -26,21 +26,21 @@ public class ESMPathNavigateGround extends PathNavigateGround
     {
         super(entitylivingIn, worldIn);
     }
-    
+
     @Override
     public void onUpdateNavigation()
     {
 		super.onUpdateNavigation();
-		
+
     	if(this.noPath())
     	{
-            if (this.targetPosition != null && theEntity.isOnLadder()) // Similar to climbing AI but only active on ladders
+            if (this.targetPosition != null && entity.isOnLadder()) // Similar to climbing AI but only active on ladders
             {
-                double d0 = (double)(this.theEntity.width * this.theEntity.width);
+                double d0 = (double)(this.entity.width * this.entity.width);
 
-                if (this.theEntity.getDistanceSqToCenter(this.targetPosition) >= d0 && (this.theEntity.posY <= (double)this.targetPosition.getY() || this.theEntity.getDistanceSqToCenter(new BlockPos(this.targetPosition.getX(), MathHelper.floor(this.theEntity.posY), this.targetPosition.getZ())) >= d0))
+                if (this.entity.getDistanceSqToCenter(this.targetPosition) >= d0 && (this.entity.posY <= (double)this.targetPosition.getY() || this.entity.getDistanceSqToCenter(new BlockPos(this.targetPosition.getX(), MathHelper.floor(this.entity.posY), this.targetPosition.getZ())) >= d0))
                 {
-                    this.theEntity.getMoveHelper().setMoveTo((double)this.targetPosition.getX(), (double)this.targetPosition.getY(), (double)this.targetPosition.getZ(), this.speed);
+                    this.entity.getMoveHelper().setMoveTo((double)this.targetPosition.getX(), (double)this.targetPosition.getY(), (double)this.targetPosition.getZ(), this.speed);
                 }
                 else
                 {
@@ -52,7 +52,7 @@ public class ESMPathNavigateGround extends PathNavigateGround
             }
     	}
     }
-    
+
     @Override
     protected PathFinder getPathFinder()
     {
@@ -67,13 +67,13 @@ public class ESMPathNavigateGround extends PathNavigateGround
     @Override
     protected boolean canNavigate()
     {
-        return this.theEntity.onGround || this.getCanSwim() && this.isInLiquid() || this.theEntity.isRiding() || this.theEntity.isOnLadder();
+        return this.entity.onGround || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding() || this.entity.isOnLadder();
     }
-    
+
     @Override
     protected Vec3d getEntityPosition()
     {
-        return new Vec3d(this.theEntity.posX, (double)this.getPathablePosY(), this.theEntity.posZ);
+        return new Vec3d(this.entity.posX, (double)this.getPathablePosY(), this.entity.posZ);
     }
 
     /**
@@ -137,42 +137,42 @@ public class ESMPathNavigateGround extends PathNavigateGround
      */
     private int getPathablePosY()
     {
-        if (this.theEntity.isInWater() && this.getCanSwim())
+        if (this.entity.isInWater() && this.getCanSwim())
         {
-            int i = (int)this.theEntity.getEntityBoundingBox().minY;
-            Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.theEntity.posX), i, MathHelper.floor(this.theEntity.posZ))).getBlock();
+            int i = (int)this.entity.getEntityBoundingBox().minY;
+            Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
             int j = 0;
 
             while (block == Blocks.FLOWING_WATER || block == Blocks.WATER)
             {
                 ++i;
-                block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.theEntity.posX), i, MathHelper.floor(this.theEntity.posZ))).getBlock();
+                block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
                 ++j;
 
                 if (j > 16)
                 {
-                    return (int)this.theEntity.getEntityBoundingBox().minY;
+                    return (int)this.entity.getEntityBoundingBox().minY;
                 }
             }
 
             return i;
-        } else if(this.theEntity.isOnLadder())
+        } else if(this.entity.isOnLadder())
         {
-            int i = (int)this.theEntity.getEntityBoundingBox().minY;
-            BlockPos blockpos = new BlockPos(MathHelper.floor(this.theEntity.posX), i, MathHelper.floor(this.theEntity.posZ));
+            int i = (int)this.entity.getEntityBoundingBox().minY;
+            BlockPos blockpos = new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ));
             IBlockState state = this.world.getBlockState(blockpos);
-            
-            while(state.getBlock().isLadder(state, this.theEntity.world, blockpos, this.theEntity))
+
+            while(state.getBlock().isLadder(state, this.entity.world, blockpos, this.entity))
             {
             	i++;
-                blockpos = new BlockPos(MathHelper.floor(this.theEntity.posX), i, MathHelper.floor(this.theEntity.posZ));
+                blockpos = new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ));
                 state = this.world.getBlockState(blockpos);
             }
-            
+
             return i;
         } else
         {
-            return (int)(this.theEntity.getEntityBoundingBox().minY + 0.5D);
+            return (int)(this.entity.getEntityBoundingBox().minY + 0.5D);
         }
     }
 
@@ -204,7 +204,7 @@ public class ESMPathNavigateGround extends PathNavigateGround
 
         if (this.shouldAvoidSun)
         {
-            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.theEntity.posX), (int)(this.theEntity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.theEntity.posZ))))
+            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.posX), (int)(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.posZ))))
             {
                 return;
             }
@@ -233,7 +233,7 @@ public class ESMPathNavigateGround extends PathNavigateGround
         double d0 = posVec32.x - posVec31.x;
         double d1 = posVec32.z - posVec31.z;
         double d2 = d0 * d0 + d1 * d1;
-        
+
         if (d2 < 1.0E-8D)
         {
             return false;
@@ -327,7 +327,7 @@ public class ESMPathNavigateGround extends PathNavigateGround
 
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D)
                     {
-                        PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.theEntity, sizeX, sizeY, sizeZ, true, true);
+                        PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
 
                         if (pathnodetype == PathNodeType.WATER)
                         {
@@ -344,8 +344,8 @@ public class ESMPathNavigateGround extends PathNavigateGround
                             return false;
                         }
 
-                        pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.theEntity, sizeX, sizeY, sizeZ, true, true);
-                        float f = this.theEntity.getPathPriority(pathnodetype);
+                        pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        float f = this.entity.getPathPriority(pathnodetype);
 
                         if (f < 0.0F || f >= 8.0F)
                         {
@@ -387,37 +387,37 @@ public class ESMPathNavigateGround extends PathNavigateGround
 
         return true;
     }
-    
+
     @Override
     public void setBreakDoors(boolean canBreakDoors)
     {
-        this.nodeProcessor.setCanBreakDoors(canBreakDoors);
+        this.nodeProcessor.setCanOpenDoors(canBreakDoors);
     }
-    
+
     @Override
     public void setEnterDoors(boolean enterDoors)
     {
         this.nodeProcessor.setCanEnterDoors(enterDoors);
     }
-    
+
     @Override
     public boolean getEnterDoors()
     {
         return this.nodeProcessor.getCanEnterDoors();
     }
-    
+
     @Override
     public void setCanSwim(boolean canSwim)
     {
         this.nodeProcessor.setCanSwim(canSwim);
     }
-    
+
     @Override
     public boolean getCanSwim()
     {
         return this.nodeProcessor.getCanSwim();
     }
-    
+
     @Override
     public void setAvoidSun(boolean avoidSun)
     {
